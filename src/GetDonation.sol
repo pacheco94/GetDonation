@@ -1,4 +1,4 @@
-//SPDX-Lisence-Identifier:MIT
+//SPDX-License-Identifier:MIT
 pragma solidity ^0.8.28;
 
 contract GetDonation {
@@ -6,7 +6,10 @@ contract GetDonation {
 
     //Programa events
     event TipReceived(address indexed from, uint256 amount);
-    event OwnerShipTransfered(address indexed previosOwner, address indexed newOwner);
+    event OwnerShipTransfered(
+        address indexed previosOwner,
+        address indexed newOwner
+    );
     event WithDrawn(address indexed owner, uint256 amount);
 
     constructor() {
@@ -31,7 +34,7 @@ contract GetDonation {
         require(amount > 0, "Not founds to withdraw");
         uint256 prevBlance = address(this).balance;
 
-        (bool success,) = owner.call{value: amount}("");
+        (bool success, ) = owner.call{value: amount}("");
         require(success, "Transfer fail.");
 
         require(address(this).balance == prevBlance - amount);
