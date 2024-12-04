@@ -5,12 +5,9 @@ contract GetDonation {
     address payable public owner;
 
     //Programa events
-    event TipReceived(address indexed from, uint amount);
-    event OwnerShipTransfered(
-        address indexed previosOwner,
-        address indexed newOwner
-    );
-    event WithDrawn(address indexed owner, uint amount);
+    event TipReceived(address indexed from, uint256 amount);
+    event OwnerShipTransfered(address indexed previosOwner, address indexed newOwner);
+    event WithDrawn(address indexed owner, uint256 amount);
 
     constructor() {
         owner = payable(msg.sender);
@@ -30,11 +27,11 @@ contract GetDonation {
 
     //function withdraw donation
     function withDraw() public onlyOwner {
-        uint amount = address(this).balance;
+        uint256 amount = address(this).balance;
         require(amount > 0, "Not founds to withdraw");
-        uint prevBlance = address(this).balance;
+        uint256 prevBlance = address(this).balance;
 
-        (bool success, ) = owner.call{value: amount}("");
+        (bool success,) = owner.call{value: amount}("");
         require(success, "Transfer fail.");
 
         require(address(this).balance == prevBlance - amount);
@@ -51,12 +48,12 @@ contract GetDonation {
     }
 
     //function to get contract balance
-    function getContractBalance() public view returns (uint) {
+    function getContractBalance() public view returns (uint256) {
         return address(this).balance;
     }
 
     //function to get owner balance
-    function getOwnerBalance() public view returns (uint) {
+    function getOwnerBalance() public view returns (uint256) {
         return owner.balance;
     }
 

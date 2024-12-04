@@ -1,5 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
+
 import "forge-std/Script.sol";
 import "../src/GetDonation.sol";
 
@@ -9,7 +10,7 @@ contract GetDonationScript is Script {
     function setUp() public {}
 
     function run() public {
-        uint privateKey = vm.envUint("PRIVATE_KEY");
+        uint256 privateKey = vm.envUint("PRIVATE_KEY");
 
         vm.startBroadcast(privateKey);
 

@@ -1,6 +1,7 @@
 //SPDX-License-Identifier:MTI
 
 pragma solidity 0.8.28;
+
 import "forge-std/Test.sol";
 import "../src/GetDonation.sol";
 
@@ -10,14 +11,11 @@ contract GetDonationTest is Test {
     address payable public alice;
     address payable public bob;
     address payable public carol;
-    uint public initialBalance = 100 ether;
+    uint256 public initialBalance = 100 ether;
 
-    event TipReceived(address indexed form, uint amount);
-    event OwnerShipTransfered(
-        address indexed previosOwner,
-        address indexed newOwner
-    );
-    event WithDrawn(address indexed owner, uint amount);
+    event TipReceived(address indexed form, uint256 amount);
+    event OwnerShipTransfered(address indexed previosOwner, address indexed newOwner);
+    event WithDrawn(address indexed owner, uint256 amount);
 
     function setUp() public {
         alice = payable(makeAddr("alice"));
@@ -47,8 +45,8 @@ contract GetDonationTest is Test {
 
     //Testing tip with ether
     function test_TipWithEther() public {
-        uint amount = 7 ether;
-        uint preContractBalance = getDonation.getContractBalance();
+        uint256 amount = 7 ether;
+        uint256 preContractBalance = getDonation.getContractBalance();
         vm.prank(carol);
         vm.expectEmit();
         emit TipReceived(carol, amount);
@@ -57,23 +55,20 @@ contract GetDonationTest is Test {
     }
 
     // Testing multiple tip fuzzing test
-    function test_FuzzingTip(uint _amount) public {
+    function test_FuzzingTip(uint256 _amount) public {
         _amount = bound(_amount, 1, 100 ether);
         vm.deal(bob, _amount);
-        uint initialContractBalance = address(getDonation).balance;
+        uint256 initialContractBalance = address(getDonation).balance;
         vm.prank(bob);
         getDonation.tip{value: _amount}();
-        assertEq(
-            address(getDonation).balance,
-            initialContractBalance + _amount
-        );
+        assertEq(address(getDonation).balance, initialContractBalance + _amount);
     }
 
     //Test Withdraw function
     function test_WhidrawOnlyOwner() public {
-        uint amount = 8 ether;
-        uint initialOwnerBalance = alice.balance;
-        uint initialContractBalance = address(getDonation).balance;
+        uint256 amount = 8 ether;
+        uint256 initialOwnerBalance = alice.balance;
+        uint256 initialContractBalance = address(getDonation).balance;
 
         //carol send ether
         vm.prank(carol);
@@ -90,7 +85,7 @@ contract GetDonationTest is Test {
 
     //test withdraw not owner
     function test_WhidrawNotOwnerCannot() public {
-        uint amount = 1 ether;
+        uint256 amount = 1 ether;
 
         vm.prank(carol);
         getDonation.tip{value: amount}();
@@ -126,14 +121,14 @@ contract GetDonationTest is Test {
 
     //testing Receiving function
     function test_ReceivenFunction() public {
-        uint sendAmount = 3 ether;
+        uint256 sendAmount = 3 ether;
 
         //bob send ether to the contract
         vm.prank(bob);
         vm.expectEmit();
         emit TipReceived(bob, sendAmount);
 
-        (bool success, ) = address(getDonation).call{value: sendAmount}("");
+        (bool success,) = address(getDonation).call{value: sendAmount}("");
         require(success, "Transfer fail");
 
         assertEq(address(getDonation).balance, sendAmount);
