@@ -1,6 +1,6 @@
 //SPDX-License-Identifier:MTI
 
-pragma solidity 0.8.28;
+pragma solidity 0.8.29;
 
 import "forge-std/Test.sol";
 import "../src/GetDonation.sol";
@@ -14,7 +14,10 @@ contract GetDonationTest is Test {
     uint256 public initialBalance = 100 ether;
 
     event TipReceived(address indexed form, uint256 amount);
-    event OwnerShipTransfered(address indexed previosOwner, address indexed newOwner);
+    event OwnerShipTransfered(
+        address indexed previosOwner,
+        address indexed newOwner
+    );
     event WithDrawn(address indexed owner, uint256 amount);
 
     function setUp() public {
@@ -61,7 +64,10 @@ contract GetDonationTest is Test {
         uint256 initialContractBalance = address(getDonation).balance;
         vm.prank(bob);
         getDonation.tip{value: _amount}();
-        assertEq(address(getDonation).balance, initialContractBalance + _amount);
+        assertEq(
+            address(getDonation).balance,
+            initialContractBalance + _amount
+        );
     }
 
     //Test Withdraw function
@@ -128,7 +134,7 @@ contract GetDonationTest is Test {
         vm.expectEmit();
         emit TipReceived(bob, sendAmount);
 
-        (bool success,) = address(getDonation).call{value: sendAmount}("");
+        (bool success, ) = address(getDonation).call{value: sendAmount}("");
         require(success, "Transfer fail");
 
         assertEq(address(getDonation).balance, sendAmount);
