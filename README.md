@@ -1,41 +1,67 @@
-## Foundry
+# GetDonation Smart Contract
 
-Contrato de GetDonation
-El contrato GetDonation está diseñado para facilitar la recepción y gestión de donaciones. A continuación, se incluye una descripción general de sus componentes y funcionalidades clave.
+A Solidity smart contract designed to facilitate the reception and management of donations on the Ethereum blockchain.
 
-Componentes clave
+## Overview
 
-1. Gestión del propietario
-   El contrato tiene un propietario , que es una dirección de pago establecida en la dirección del implementador al momento de la creación del contrato.
-   El onlyOwnermodificador garantiza que ciertas funciones sólo puedan ser ejecutadas por el propietario del contrato.
-2. Eventos
-   TipReceived:Se emite cuando se recibe una donación (propina), incluyendo la dirección del remitente y el monto enviado.
-   OwnerShipTransfered:Se emite cuando la propiedad del contrato se transfiere del propietario anterior a un nuevo propietario.
-   WithDrawn:Se emite cuando el propietario retira fondos del contrato.
-3. Donaciones
-   La tipfunción permite que cualquier persona envíe ETH al contrato como donación. Esta función:
-   Asegura que la cantidad enviada sea mayor a 0.
-   Emite el TipReceivedevento cuando se recibe la donación.
-4. Retiros
-   La withDrawfunción permite al titular retirar el saldo total del contrato. Esta función:
-   Asegurarse de que haya fondos disponibles.
-   Verifica que la transferencia de fondos sea exitosa.
-   Emite el WithDrawnevento una vez que se retiran los fondos.
-5. Transferencia de propiedad
-   La transferOwnerShipfunción permite al propietario actual transferir la propiedad a una nueva dirección. Esta función:
-   Asegura que la dirección del nuevo propietario sea válida y diferente de la actual.
-   Emite el OwnerShipTransferedevento al transferir la propiedad.
-6. Consultas de saldo
-   getContractBalance:Devuelve el saldo actual del contrato.
-   getOwnerBalance:Devuelve el saldo actual de la dirección del propietario.
-7. Función de reserva
-   La receivefunción permite que el contrato reciba ETH directamente y emite el TipReceivedevento cuando esto sucede.
-   Uso
-   Donando
-   Cualquiera puede realizar una donación al contrato mediante la tipfunción. La donación debe ser mayor a 0 ETH.
+GetDonation is a smart contract that allows users to send donations (tips) in ETH and provides functionality for the contract owner to manage these funds.
 
-Retirar fondos
-Sólo el propietario puede retirar los fondos acumulados en el contrato utilizando la withDrawfunción.
+## Key Features
 
-Transferencia de propiedad
-El propietario puede transferir la propiedad del contrato a una nueva dirección utilizando la transferOwnerShipfunción.
+### 1. Owner Management
+- The contract has an owner address set during deployment
+- `onlyOwner` modifier ensures certain functions can only be executed by the contract owner
+
+### 2. Events
+- `TipReceived`: Emitted when a donation is received, including sender address and amount
+- `OwnershipTransferred`: Emitted when contract ownership is transferred
+- `Withdrawn`: Emitted when the owner withdraws funds from the contract
+
+### 3. Donations
+The `tip` function allows anyone to send ETH to the contract as a donation:
+- Ensures the sent amount is greater than 0
+- Emits the `TipReceived` event upon successful donation
+
+### 4. Withdrawals
+The `withdraw` function enables the owner to withdraw the total contract balance:
+- Verifies available funds
+- Ensures successful fund transfer
+- Emits the `Withdrawn` event upon successful withdrawal
+
+### 5. Ownership Transfer
+The `transferOwnership` function allows the current owner to transfer ownership to a new address:
+- Validates the new owner's address
+- Ensures the new address is different from the current owner
+- Emits the `OwnershipTransferred` event
+
+### 6. Balance Queries
+- `getContractBalance`: Returns the current contract balance
+- `getOwnerBalance`: Returns the current owner's address balance
+
+### 7. Fallback Function
+- The `receive` function allows the contract to receive ETH directly
+- Emits the `TipReceived` event when ETH is received
+
+## Usage
+
+### Making Donations
+Anyone can make a donation to the contract using the `tip` function. The donation must be greater than 0 ETH.
+
+### Withdrawing Funds
+Only the owner can withdraw accumulated funds from the contract using the `withdraw` function.
+
+### Transferring Ownership
+The owner can transfer contract ownership to a new address using the `transferOwnership` function.
+
+## Development
+
+This project is built using Foundry. To get started:
+
+1. Install Foundry
+2. Clone this repository
+3. Run `forge install` to install dependencies
+4. Run `forge test` to run tests
+
+## License
+
+This project is licensed under the MIT License.
